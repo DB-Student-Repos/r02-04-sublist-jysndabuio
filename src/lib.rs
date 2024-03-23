@@ -7,5 +7,20 @@ pub enum Comparison {
 }
 
 pub fn sublist<T: PartialEq>(_first_list: &[T], _second_list: &[T]) -> Comparison {
-    unimplemented!("Determine if the first list is equal to, sublist of, superlist of or unequal to the second list.");
+
+    if _first_list.is_empty() && !_second_list.is_empty() {
+        return Comparison::Sublist
+    } else if !_first_list.is_empty() && _second_list.is_empty() {
+        return Comparison::Superlist
+    }
+
+    if _first_list == _second_list {
+        Comparison::Equal
+    } else if _second_list.windows(_first_list.len()).any(|list| list == _first_list) {
+        Comparison::Sublist
+    } else if _first_list.windows(_second_list.len()).any(|list| list == _second_list) {
+        Comparison::Superlist
+    } else {
+        Comparison::Unequal
+    }
 }
