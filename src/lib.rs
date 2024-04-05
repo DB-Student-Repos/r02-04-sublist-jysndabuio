@@ -8,19 +8,14 @@ pub enum Comparison {
 
 pub fn sublist<T: PartialEq>(_first_list: &[T], _second_list: &[T]) -> Comparison {
 
-    if _first_list.is_empty() && !_second_list.is_empty() {
-        return Comparison::Sublist
-    } else if !_first_list.is_empty() && _second_list.is_empty() {
+    if _first_list.is_empty() && _second_list.is_empty() || _first_list == _second_list {
+        return Comparison::Equal
+    } else if _second_list.is_empty() || _first_list.windows(_second_list.len()).any(|list| list == _second_list) {
         return Comparison::Superlist
+    } else if _first_list.is_empty() || _second_list.windows(_first_list.len()).any(|list| list == _first_list) {
+        return Comparison::Sublist
+    } else {
+        return Comparison::Unequal
     }
 
-    if _first_list == _second_list {
-        Comparison::Equal
-    } else if _second_list.windows(_first_list.len()).any(|list| list == _first_list) {
-        Comparison::Sublist
-    } else if _first_list.windows(_second_list.len()).any(|list| list == _second_list) {
-        Comparison::Superlist
-    } else {
-        Comparison::Unequal
-    }
 }
